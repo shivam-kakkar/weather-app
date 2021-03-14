@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react';
 import {TextInput, Button, Title, Card} from 'react-native-paper';
 import {View, Text, Image} from 'react-native';
 import Header from './Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Home = () => {
+const Home = props => {
   const [info, setInfo] = useState({
     name: 'loading !!',
     temp: 'loading',
@@ -14,9 +15,14 @@ const Home = () => {
   useEffect(() => {
     getWeather();
   }, []);
-  const getWeather = () => {
+  const getWeather = async () => {
+    let MyCity = await AsyncStorage.getItem('newcity');
+    if (!MyCity) {
+      const {city} = props.route.params;
+      MyCity = city;
+    }
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=london&appid=[YOUR_API_KEY]&units=metric`,
+      `https://api.openweathermap.org/data/2.5/weather?q=${MyCity}&appid=74266b773acbb9edac672822b26fab73&units=metric`,
     )
       .then(data => data.json())
       .then(results => {
@@ -29,8 +35,11 @@ const Home = () => {
         });
         console.log(info);
       })
-      .catch(error => console.log(error));
+      .catch(error => alert(error.message));
   };
+  if (props.route.params.city != 'london') {
+    getWeather();
+  }
   return (
     <View style={{flex: 1}}>
       <Header name="Weather App" />

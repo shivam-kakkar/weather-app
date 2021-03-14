@@ -2,9 +2,15 @@ import React, {useState} from 'react';
 import {TextInput, Button} from 'react-native-paper';
 import {View, Text} from 'react-native';
 import Header from './Header';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Search = () => {
+const Search = ({navigation}) => {
   const [city, setCity] = useState('');
+
+  const btnClick = async () => {
+    await AsyncStorage.setItem('newcity', city);
+    navigation.navigate('home', {city: city});
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -20,8 +26,8 @@ const Search = () => {
         mode="contained"
         theme={{colors: {primary: '#00aaff'}}}
         style={{margin: 20}}
-        onPress={() => console.log('Pressed')}>
-        <Text style={{color: 'white'}}>Press me</Text>
+        onPress={() => btnClick()}>
+        <Text style={{color: 'white'}}>Save Changes</Text>
       </Button>
     </View>
   );
