@@ -22,7 +22,7 @@ const Home = props => {
       MyCity = city;
     }
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${MyCity}&appid=74266b773acbb9edac672822b26fab73&units=metric`,
+      `https://api.openweathermap.org/data/2.5/weather?q=${MyCity}&appid=[YOUR_API_KEY]&units=metric`,
     )
       .then(data => data.json())
       .then(results => {
